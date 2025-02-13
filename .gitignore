@@ -1,3 +1,4 @@
 .env
 config/config.py
 .venv
+migrations

@@ -16,6 +16,7 @@ class ApiResponse:
             "message":self.message,
             "statusCode":self.statusCode,
             "data":self.data
+
         })
 
 

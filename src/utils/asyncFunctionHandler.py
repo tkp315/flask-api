@@ -7,7 +7,7 @@ def asyncFunctionHandler(requestFunction):
           try:
                return await requestFunction(*args,**kwargs)
           except Exception as err:
-               status_code=err.code if hasattr(err,"code") and 100<err.code<600 else 500
+               status_code=err.code if hasattr(err,"code") and 100 < err.code < 600 else 500
                return jsonify({
                     "success":False,
                     "message":str(err) or "Internal Server Error"

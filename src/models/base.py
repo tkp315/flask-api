@@ -3,7 +3,7 @@ from  src.database.db import SessionLocal
 from sqlalchemy import Column,DateTime
 from datetime import datetime
 Model = declarative_base()
-
+session = SessionLocal()
 
 
 class TimeStampedModel(Model):
