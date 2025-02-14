@@ -16,7 +16,10 @@ CORS(app,origins=Config.FRONTEND_URL)
 app.config["JWT_SECRET_KEY"] =Config.JWT_SECRET_KEY
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(minutes=int(Config.JWT_ACCESS_TOKEN_EXPIRES))
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = datetime.timedelta(days=int(Config.JWT_REFRESH_TOKEN_EXPIRES))
-
+app.config["JWT_ACCESS_COOKIE_NAME"] = "access_token"
+app.config["JWT_REFRESH_COOKIE_NAME"] = "refresh_token"
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 jwt = JWTManager(app)
 
 from src.routes.user_routes import user_routes

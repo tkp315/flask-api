@@ -9,7 +9,7 @@ import bcrypt
 from sqlalchemy import text, inspect, or_
 from src.models.user import UserRole
 from flask_jwt_extended import (
-    create_access_token,create_refresh_token,jwt_required,get_jwt_identity,
+    create_access_token,create_refresh_token,get_jwt_identity,
 )
 from src.app import jwt
 
@@ -55,6 +55,7 @@ async def sign_in():
 
 @asyncFunctionHandler
 async def login():
+
     login_data = req.get_json();
     print(login_data)
     credential= login_data['credential']
@@ -80,8 +81,8 @@ async def login():
 
     # generate the tokens
 
-    access_token = create_access_token(identity={"email":credential,"_id":user._id})
-    refresh_token = create_refresh_token(identity={"email":credential,"_id":user._id})
+    access_token = create_access_token(identity=str(user._id))
+    refresh_token = create_refresh_token(identity=str(user._id))
 
     user.refresh_token= refresh_token
     session.commit()
@@ -100,5 +101,24 @@ async def login():
     response = res( ApiResponse("Sign Up", True, "User Registered Successfully", 201, {"user":userDetails})())
     response.set_cookie("access_token",access_token,httponly=True)
     response.set_cookie("refresh_token",access_token,httponly=True)
+
+    return response
+
+
+
+def logout():
+    user_id = get_jwt_identity()
+    
+    user =session.query(User).filter(User._id==int(user_id)).first()
+
+    if(not user):
+        raise ApiError(401,"User Not Found")
+    
+    user.refreshToken=None
+    session.commit()
+
+    response = res(ApiResponse("Logout",True,"successfully logged out",200,None)()) 
+    response.delete_cookie("access_token",httponly=True)
+    response.delete_cookie("refresh_token",httponly=True)
 
     return response
